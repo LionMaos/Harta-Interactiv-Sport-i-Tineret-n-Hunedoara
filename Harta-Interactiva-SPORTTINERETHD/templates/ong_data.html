@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Date ONG-uri</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <a href="/" class="back-btn">← Înapoi la hartă</a>
+    <div class="ong-container">
+        <h1>Date Complete ONG-uri</h1>
+        {% for facility in facilities %}
+        <div class="ong-item">
+            <h2>{{ facility.name }}</h2>
+            <div class="ong-details">
+                <p><strong>Adresă:</strong> {{ facility.address }}</p>
+                <p><strong>Telefon:</strong> {{ facility.phone }}</p>
+                <p><strong>Website:</strong> {{ facility.website }}</p>
+                <p><strong>Email:</strong> {{ facility.email }}</p>
+                <p><strong>Grup țintă:</strong> {{ facility.target_group }}</p>
+                <p><strong>Descriere activități:</strong> {{ facility.activities_description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

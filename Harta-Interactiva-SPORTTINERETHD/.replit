@@ -1,0 +1,36 @@
+entrypoint = "main.py"
+modules = ["python-3.11:v20-20240117-0bd73cd"]
+
+[nix]
+channel = "stable-23_11"
+enable = true
+
+[unitTest]
+language = "python3"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix"]
+
+[deployment]
+run = ["sh", "-c", "gunicorn main:app --workers=1 --threads=4 --timeout=120 --bind=0.0.0.0:5000"]
+deploymentTarget = "cloudrun"
+build = ["sh", "-c", "pip install -r requirements.txt"]
+
+[env]
+REPLIT_DISABLE_PACKAGE_LAYER = "1"
+
+[workflows]
+runButton = "Run"
+
+[[workflows.workflow]]
+name = "Run"
+author = 41229343
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py"
+
+[[ports]]
+localPort = 5000
+externalPort = 80

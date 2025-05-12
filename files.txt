@@ -1,0 +1,22 @@
+Harta-Interactiva-SPORTTINERETHD/.gitignore
+Harta-Interactiva-SPORTTINERETHD/.replit
+Harta-Interactiva-SPORTTINERETHD/attached_assets/Pasted--ntruc-t-men-ionezi-c-dup-deploy-datele-sunt-modificate-i-salvate-n-Firebase-i-stau-doar-c-te-1744831349309.txt
+Harta-Interactiva-SPORTTINERETHD/attached_assets/Pasted--ntruc-t-spui-c-datele-sunt-nc-rcate-n-mediul-de-produc-ie-dup-deploy-i-apar-n-Firebase-la--1744830976463.txt
+Harta-Interactiva-SPORTTINERETHD/attached_assets/Pasted--ntruc-t-spui-c-datele-sunt-nc-rcate-n-mediul-de-produc-ie-dup-deploy-i-apar-n-Firebase-la--1744830992129.txt
+Harta-Interactiva-SPORTTINERETHD/attached_assets/Pasted--ntruc-t-spui-c-datele-sunt-nc-rcate-n-mediul-de-produc-ie-dup-deploy-i-apar-n-Firebase-la--1744831018291.txt
+Harta-Interactiva-SPORTTINERETHD/attached_assets/sigla djsthd -PhotoRoom.png-PhotoRoom.png
+Harta-Interactiva-SPORTTINERETHD/firebase-key (copy).json
+Harta-Interactiva-SPORTTINERETHD/generated-icon.png
+Harta-Interactiva-SPORTTINERETHD/main (copy).py
+Harta-Interactiva-SPORTTINERETHD/main.py
+Harta-Interactiva-SPORTTINERETHD/pyproject.toml
+Harta-Interactiva-SPORTTINERETHD/replit.nix
+Harta-Interactiva-SPORTTINERETHD/requirements.txt
+Harta-Interactiva-SPORTTINERETHD/static/logo.png
+Harta-Interactiva-SPORTTINERETHD/static/style.css
+Harta-Interactiva-SPORTTINERETHD/templates/admin.html
+Harta-Interactiva-SPORTTINERETHD/templates/index.html
+Harta-Interactiva-SPORTTINERETHD/templates/login.html
+Harta-Interactiva-SPORTTINERETHD/templates/ong_data.html
+Harta-Interactiva-SPORTTINERETHD/templates/structuri_sportive.html
+Harta-Interactiva-SPORTTINERETHD/uv.lock

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sport și Tineret în Hunedoara</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="creator-credit">Created by Prof. Simina Marius</div>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="DJST HD Logo" class="logo">
+        <h1>SPORT ȘI TINERET ÎN HUNEDOARA</h1>
+        <div class="tab-buttons">
+            <button class="tab-btn {% if active_type == 'all' %}active{% endif %}" onclick="filterFacilities('all')">Toate</button>
+            <button class="tab-btn {% if active_type == 'sport' %}active{% endif %}" onclick="filterFacilities('sport')">Sport</button>
+            <button class="tab-btn {% if active_type == 'ong' %}active{% endif %}" onclick="window.location.href='/ong_data'">ONG</button>
+            <button class="tab-btn {% if active_type == 'DJST HD' %}active{% endif %}" onclick="goToDJST()">DJST HD</button>
+        </div>
+
+        <div id="sportMenu" class="sport-submenu" style="display: none;">
+            <button onclick="filterSportFacilities('structuri_sportive')">Structuri Sportive</button>
+            <button onclick="filterSportFacilities('stadioane')">Stadioane</button>
+            <button onclick="filterSportFacilities('terenuri')">Terenuri de sport</button>
+            <button onclick="filterSportFacilities('sali')">Săli de Sport</button>
+            <button onclick="filterSportFacilities('tenis')">Baze de tenis</button>
+        </div>
+
+        <div class="legend">
+            <h3>Legenda</h3>
+            <div class="legend-item">
+                <span class="dot sport"></span> Facilitati Sport
+            </div>
+            <div class="legend-item">
+                <span class="dot ong"></span> ONG-uri
+            </div>
+        </div>
+        <button class="admin-btn" onclick="window.location.href='/admin'">Admin Panel</button>
+    </div>
+
+    <div class="map-container">
+        {{ map | safe }}
+    </div>
+    <script>
+
+        async function editFacility(id) {
+            try {
+                const response = await fetch(`/api/facilities/${id}`);
+                const facility = await response.json();
+                if (facility) {
+                    window.location.href = `/admin?edit=${id}`;
+                }
+            } catch (error) {
+                console.error('Eroare la editare:', error);
+            }
+        }
+
+        function filterFacilities(type) {
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            const menu = document.getElementById('sportMenu');
+
+            if (type === 'sport') {
+                const sportBtn = document.querySelector('.tab-btn[onclick="filterFacilities(\'sport\')"]');
+                sportBtn.classList.add('active');
+                if (menu.style.display === 'block') {
+                    menu.style.display = 'none';
+                } else {
+                    menu.style.display = 'block';
+                    menu.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+                return false;
+            } else {
+                menu.style.display = 'none';
+                const activeBtn = document.querySelector(`.tab-btn[onclick="filterFacilities('${type}')"]`);
+                if (activeBtn) activeBtn.classList.add('active');
+                window.location.href = `/?type=${type}`;
+            }
+        }
+
+        function filterSportFacilities(category) {
+            window.location.href = `/?type=sport&category=${category}`;
+        }
+
+        function goToDJST() {
+            window.location.href = '/djst_data';
+        }
+        </script>
+</body>
+</html>

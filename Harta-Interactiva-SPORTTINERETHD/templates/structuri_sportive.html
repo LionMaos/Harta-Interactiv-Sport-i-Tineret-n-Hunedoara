@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Structuri Sportive</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="sidebar">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="DJST HD Logo" class="logo">
+        <h1>STRUCTURI SPORTIVE</h1>
+        <button class="admin-btn" onclick="window.location.href='/admin'">Admin Panel</button>
+        <a href="/" class="back-btn">← Înapoi la hartă</a>
+    </div>
+    
+    <div class="structures-container">
+        {% for facility in facilities %}
+        <div class="structure-card">
+            <h2>{{ facility.name }}</h2>
+            <p><strong>Adresa:</strong> {{ facility.address }}</p>
+            <p><strong>Telefon:</strong> {{ facility.phone }}</p>
+            {% if facility.website %}<p><strong>Website:</strong> <a href="{{ facility.website }}" target="_blank">{{ facility.website }}</a></p>{% endif %}
+            {% if facility.email %}<p><strong>Email:</strong> <a href="mailto:{{ facility.email }}">{{ facility.email }}</a></p>{% endif %}
+            
+            {% if facility.sections %}
+            <div class="sections">
+                <h3>Secții sportive:</h3>
+                {% for section in facility.sections %}
+                <div class="section">
+                    <h4>{{ section.name }}</h4>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

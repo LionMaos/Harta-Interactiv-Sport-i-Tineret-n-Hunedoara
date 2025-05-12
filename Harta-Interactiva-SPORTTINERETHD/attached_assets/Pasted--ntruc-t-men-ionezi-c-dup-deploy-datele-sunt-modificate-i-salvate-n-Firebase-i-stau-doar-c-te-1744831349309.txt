@@ -1,0 +1,85 @@
+Întrucât menționezi că după deploy datele sunt modificate și salvate în Firebase și „stau” doar câteva ore înainte de a dispărea, există câteva aspecte specifice pe care le-am putea investiga:
+
+
+---
+
+1. Automatizarea re-deploy-ului sau „seeding”-ul neintenționat
+
+Posibilitatea existenței unui script de seeding activ:
+E posibil ca la repornirea containerului (sau a instanței din Replit) să ruleze un script care, fie recreează structura inițială a bazei de date, fie resetează sau șterge datele existente.
+Ce să faci:
+
+Caută în cod orice segment ce folosește operații de tipul set(), update() sau care atribuie direct un obiect de start pentru colecția respectivă.
+
+Verifică dacă acest script este condiționat de mediu (ex.: să ruleze doar în dezvoltare) sau dacă se execută indiferent de mediul în producție.
+
+
+
+
+---
+
+2. Rulare periodică sau task-uri programate (cron job)
+
+Posibilitatea unui proces periodic care rescrie baza de date:
+Dacă în cod există un mecanism (ex.: un cron job, un setInterval() sau o altă funcționalitate programată) care rulează la intervale regulate și rescrie datele (sau le golește), datele salvate ulterior ar putea fi suprascrise.
+Ce să faci:
+
+Revizuiește toate secțiunile din cod care implică acțiuni programate, pentru a te asigura că nu există un task care actualizează sau resetează colecția de facilități.
+
+
+
+
+---
+
+3. Configurarea sau regulile Firebase
+
+Verifică regulile de scriere:
+Deși la început datele se salvează corect, regulile de securitate ar putea influența comportamentul pe termen lung – de exemplu, dacă pe baza unui anumit trigger (sau din cauza unor condiții de autorizare) se fac operații de ștergere. Ce să faci:
+
+Accesează Firebase Console și analizează „Rules”. Pentru testare, poți seta temporar drepturi complete:
+
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+
+Verifică dacă nu ai configurat vreo funcționalitate (ex.: un trigger Firebase) care să reseteze colecția în anumite situații.
+
+
+
+
+---
+
+4. Monitorizarea și logarea operațiunilor de scriere
+
+Adaugă loguri detaliate:
+Pentru a identifica momentul în care datele dispar, adaugă mesaje de log înainte și după orice operație de scriere sau modificare a bazei de date.
+Ce să faci:
+
+Loghează operațiile de salvare, ștergere sau modificare, astfel încât să ai o pistă clară despre ce script sau funcție rulează la intervale regulate.
+
+Vezi dacă unele loguri apar la momentul în care datele dispar.
+
+
+
+
+---
+
+Concluzie și pași următori
+
+Revizuiește secvențele de inițializare:
+Asigură-te că la pornirea aplicației nu se execută un script care resetează întreaga colecție de facilități.
+
+Verifică task-urile programate:
+Caută orice funcție care ar putea fi activă în mediul de producție și care rescrie datele.
+
+Monitorizează log-urile:
+Folosind logging-ul, identifică momentul exact când datele dispar și vezi dacă se asociază unei anumite operații de cod sau unui re-deploy automat.
+
+
+Dacă ai posibilitatea, încearcă să izolezi problema dezactivând temporar aceste funcționalități suspecte (spre exemplu, scriptul de seeding sau task-urile periodice) și monitorizează comportamentul bazei de date în Firebase.
+
+Aceste sugestii ar trebui să te ajute să identifici cauza dispariției datelor după câteva ore și să ajustezi codul pentru a preveni resetarea neintenționată a datelor în mediul de producție. Dacă mai ai fragmente de cod sau loguri care ar putea oferi indicii suplimentare, le putem analiza împreună!
+

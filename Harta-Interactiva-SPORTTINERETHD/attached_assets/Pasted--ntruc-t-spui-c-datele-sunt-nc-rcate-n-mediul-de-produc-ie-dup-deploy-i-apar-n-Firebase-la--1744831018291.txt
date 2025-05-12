@@ -1,0 +1,94 @@
+Întrucât spui că datele sunt încărcate în mediul de producție (după deploy) și apar în Firebase la început, dar apoi (după câteva ore) dispar, acest lucru sugerează că datele nu se pierd din cauza inactivității sau a unei erori imediate de scriere, ci probabil din cauza unuia dintre următoarele scenarii:
+
+
+---
+
+1. Re-deploy Automată sau Rescrierea Datelor la Boot
+
+Este posibil ca atunci când containerul (sau mediul pe Replit) se reinițializează, să rulezi un script de „seed” sau o procedură de inițializare care rescrie baza de date cu o versiune „implicită” (goala sau predefinită) din fișierele sursă. Astfel, dacă la fiecare restart ai o secvență în cod care:
+
+Resetează sau șterge datele din baza Firebase (de exemplu, setând colecția la un array gol sau o configurație implicită)
+
+Rulează ca parte din procedura de boot a aplicației
+atunci datele pe care le-ai încărcat manual după deploy pot fi suprascrise odată cu un re-deploy automat sau o repornire a mediului.
+
+
+Ce poți face:
+
+Verifică dacă ai vreun script în cod (de exemplu, în fișierul principal de inițializare) care face set() sau update() pe anumite colecții de date.
+
+Dacă ai un mecanism de „seed”, asigură-te că nu rulează la fiecare pornire în mediul de producție sau condiționează execuția lui în funcție de mediu (development versus production).
+
+
+
+---
+
+2. Cache-ul sau Persistența din Firebase
+
+Dacă salvezi datele în Firebase și la început apar corect, dar ulterior dispar, trebuie verificat următoarele:
+
+Regulile de securitate: Uneori, regulile stricte de scriere/citire pot face ca anumite actualizări să se facă incorect, iar unele operații să nu fie persistente dacă sunt refăcute automat. Poți testa temporar regulile cu:
+
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+
+pentru a elimina o posibilă problemă legată de autentificare sau permisiuni.
+
+Cache sau sincronizare: Verifică dacă nu cumva folosești un mecanism de „cache” în aplicație care rescrie datele dintr-o sursă statică, nu din Firebase.
+
+
+
+---
+
+3. Procese de Curățare sau Cron-Job-uri Neintenționate
+
+Verifică dacă nu există un proces de curățare programat (cum ar fi un cron job sau un script ce rulează periodic) care, eventual la fiecare anumite intervale, șterge sau resetează datele stocate. Această situație poate apărea atunci când se încearcă menținerea unui „state” de test sau de dezvoltare, dar se uită să se oprească la mediul de producție.
+
+Ce să faci:
+
+Caută în cod (de exemplu, apeluri la setInterval, scripturi automate sau funcții programate) care ar putea curăța datele.
+
+Dacă folosești un serviciu sau o bibliotecă pentru programarea task-urilor (ex. node-cron), verifică-l atent.
+
+
+
+---
+
+Recomandări pentru Diagnosticare
+
+1. Verifică Log-urile
+
+Adaugă log-uri (de exemplu, în consola serverului sau în Firebase Cloud Functions, dacă le folosești) pentru a urmări când se scriu datele și dacă apare vreun eveniment de ștergere.
+
+
+
+2. Monitorizează Evenimentele
+
+Dacă e posibil, folosește Firebase Console pentru a monitoriza modificările din baza de date (de exemplu, folosind Cloud Firestore’s logging sau un trigger care să îți confirme fiecare operațiune de scriere/citire).
+
+
+
+3. Separă Procesele de Seed de Producție
+
+Dacă ai scripturi de seed, condiționează-le astfel încât să nu ruleze automat în mediul de producție, sau creează un flag ce le dezactivează.
+
+
+
+4. Verifică Dependențele Mediului de Producție
+
+Asigură-te că variabilele de mediu pentru conexiunea la Firebase sunt setate corect și nu se schimbă între deploy-uri. Dacă, de exemplu, se face o reinițializare a configurației dintr-un fișier ce se restabilește la un default, aceasta poate cauza suprascrierea datelor.
+
+
+
+
+
+---
+
+În concluzie, motivul pentru care datele dispar după câteva ore pare să fie legat de o rescriere automată sau de un proces de resetare în mediul de producție (de exemplu, la re-deploy sau printr-un script de seed), și nu de o problemă de scriere inițială în Firebase. Te recomand să verifici secvențele de inițializare ale aplicației și orice procese automate care ar putea interfera cu datele salvate ulterior.
+
+Dacă poți furniza și fragmente din codul de inițializare sau de salvare în Firebase, te pot ajuta să identifici exact unde se produce suprascrierea.
+
