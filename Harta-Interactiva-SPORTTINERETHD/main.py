@@ -12,7 +12,7 @@ db = SQLAlchemy(app)
 
 # Inițializare Firebase
 try:
-    cred = credentials.Certificate('firebase-key.json')
+    cred = credentials.Certificate('/etc/secrets/firebase-key.json')
     firebase_admin.initialize_app(cred)
     firestore_db = firestore.client()
     firebase_enabled = True
